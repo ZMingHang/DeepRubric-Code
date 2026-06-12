@@ -48,32 +48,13 @@
 
   <section class="section">
     <div class="container narrow center">
-      <h2 class="title">DeepRubric Pipeline</h2>
-      <div class="pipeline-figure">
-        <div class="pipeline-node">
-          <span>1</span>
-          <strong>Retrieve</strong>
-          <p>Wikipedia and OpenScholar local retrievers</p>
-        </div>
-        <div class="pipeline-arrow">→</div>
-        <div class="pipeline-node">
-          <span>2</span>
-          <strong>Evidence Trees</strong>
-          <p>Recursive decomposition and evidence selection</p>
-        </div>
-        <div class="pipeline-arrow">→</div>
-        <div class="pipeline-node">
-          <span>3</span>
-          <strong>Query + Rubric</strong>
-          <p>Grounded task and criteria co-generation</p>
-        </div>
-        <div class="pipeline-arrow">→</div>
-        <div class="pipeline-node">
-          <span>4</span>
-          <strong>GRPO</strong>
-          <p>Tool-using RL with rubric rewards</p>
-        </div>
-      </div>
+      <h2 class="title">Method Overview</h2>
+      <figure class="figure">
+        <object class="paper-figure method-figure" data="assets/method-overview.pdf" type="application/pdf">
+          <a href="assets/method-overview.pdf">Open the method overview figure.</a>
+        </object>
+        <figcaption>DeepRubric first constructs evidence trees, then co-generates evidence-grounded query-rubric pairs, and finally trains a tool-using research agent with rubric rewards.</figcaption>
+      </figure>
       <div class="content justified">
         <p>
           The same retriever endpoints are used in data construction and training. This keeps the reward signal, tool observations, and generated tasks aligned with the evidence available to the final agent.
@@ -96,6 +77,30 @@
           DeepRubric verifies synthesized examples with a separate audit step. Samples are either kept, revised with evidence-grounded criteria, or dropped before conversion into training data.
         </p>
       </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container narrow center">
+      <h2 class="title">Training Query Distribution</h2>
+      <figure class="figure">
+        <object class="paper-figure analysis-figure" data="assets/query-semantic-coverage.pdf" type="application/pdf">
+          <a href="assets/query-semantic-coverage.pdf">Open the training query distribution figure.</a>
+        </object>
+        <figcaption>Semantic coverage of generated training queries, visualized from BGE-large embeddings with t-SNE and density contours.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container narrow center">
+      <h2 class="title">Rubric Quality Comparison</h2>
+      <figure class="figure compact">
+        <object class="paper-figure compact-figure" data="assets/rubric-quality-radar.pdf" type="application/pdf">
+          <a href="assets/rubric-quality-radar.pdf">Open the rubric quality comparison figure.</a>
+        </object>
+        <figcaption>Human evaluation compares rubric quality across six criteria, where higher scores indicate stronger groundedness and usefulness.</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -143,7 +148,7 @@
         </table>
       </div>
       <figure class="figure">
-        <img src="assets/training-efficiency.png" alt="Training step efficiency comparison between DeepRubric and baselines.">
+        <img class="wide-image" src="assets/base-model-comparison-deeprubric.png" alt="Training step efficiency comparison between DeepRubric and baselines.">
         <figcaption>DeepRubric reaches competitive open deep-research performance with 140 GRPO update steps.</figcaption>
       </figure>
     </div>

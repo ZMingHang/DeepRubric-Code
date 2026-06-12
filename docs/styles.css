@@ -176,56 +176,6 @@ strong {
   font-weight: 750;
 }
 
-.pipeline-figure {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1fr) 34px minmax(0, 1fr) 34px minmax(0, 1fr);
-  align-items: stretch;
-  margin: 1.35rem 0 1.4rem;
-}
-
-.pipeline-node {
-  min-height: 158px;
-  padding: 1.05rem;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0 1px 3px rgba(10, 10, 10, 0.08);
-}
-
-.pipeline-node span {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  margin-bottom: 0.8rem;
-  border-radius: 999px;
-  color: #ffffff;
-  background: var(--accent);
-  font-weight: 750;
-}
-
-.pipeline-node strong {
-  display: block;
-  margin-bottom: 0.45rem;
-  font-size: 1.03rem;
-}
-
-.pipeline-node p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.92rem;
-}
-
-.pipeline-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--accent);
-  font-size: 1.6rem;
-  font-weight: 700;
-}
-
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -303,6 +253,38 @@ tbody tr:last-child td {
   border-radius: 10px;
 }
 
+.figure .wide-image {
+  width: min(100%, 860px);
+}
+
+.paper-figure {
+  display: block;
+  width: 100%;
+  height: 560px;
+  margin: 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.method-figure {
+  height: 620px;
+}
+
+.analysis-figure {
+  height: 570px;
+}
+
+.compact {
+  width: min(100%, 720px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.compact-figure {
+  height: 520px;
+}
+
 figcaption {
   margin-top: 0.65rem;
   color: var(--muted);
@@ -353,13 +335,16 @@ code {
     font-size: 1.04rem;
   }
 
-  .pipeline-figure {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
+  .paper-figure {
+    height: 480px;
   }
 
-  .pipeline-arrow {
-    transform: rotate(90deg);
+  .method-figure {
+    height: 520px;
+  }
+
+  .compact-figure {
+    height: 450px;
   }
 
   .stats-grid {
