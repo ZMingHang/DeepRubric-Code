@@ -43,6 +43,10 @@
       <p>
         The release exposes the full reproduction loop: deploy retrievers, construct evidence trees, verify KEEP/REVISE/DROP samples, convert verified data to verl-tool parquet format, and start GRPO training for a tool-using deep research agent.
       </p>
+      <figure class="figure">
+        <img class="paper-image intro-image" src="assets/intro-figure.png" alt="Query-first versus evidence-first rubric construction.">
+        <figcaption>Query-first pipelines infer rubrics from a given query; DeepRubric builds an evidence tree first and derives both the query and rubric from the same structure.</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -50,9 +54,7 @@
     <div class="container narrow center">
       <h2 class="title">Method Overview</h2>
       <figure class="figure">
-        <object class="paper-figure method-figure" data="assets/method-overview.pdf" type="application/pdf">
-          <a href="assets/method-overview.pdf">Open the method overview figure.</a>
-        </object>
+        <img class="paper-image method-image" src="assets/method-overview.png" alt="DeepRubric method overview.">
         <figcaption>DeepRubric first constructs evidence trees, then co-generates evidence-grounded query-rubric pairs, and finally trains a tool-using research agent with rubric rewards.</figcaption>
       </figure>
       <div class="content justified">
@@ -84,22 +86,8 @@
     <div class="container narrow center">
       <h2 class="title">Training Query Distribution</h2>
       <figure class="figure">
-        <object class="paper-figure analysis-figure" data="assets/query-semantic-coverage.pdf" type="application/pdf">
-          <a href="assets/query-semantic-coverage.pdf">Open the training query distribution figure.</a>
-        </object>
+        <img class="paper-image wide-image" src="assets/query-semantic-coverage.png" alt="Training query distribution projected with BGE-large embeddings and t-SNE.">
         <figcaption>Semantic coverage of generated training queries, visualized from BGE-large embeddings with t-SNE and density contours.</figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container narrow center">
-      <h2 class="title">Rubric Quality Comparison</h2>
-      <figure class="figure compact">
-        <object class="paper-figure compact-figure" data="assets/rubric-quality-radar.pdf" type="application/pdf">
-          <a href="assets/rubric-quality-radar.pdf">Open the rubric quality comparison figure.</a>
-        </object>
-        <figcaption>Human evaluation compares rubric quality across six criteria, where higher scores indicate stronger groundedness and usefulness.</figcaption>
       </figure>
     </div>
   </section>
@@ -148,7 +136,7 @@
         </table>
       </div>
       <figure class="figure">
-        <img class="wide-image" src="assets/base-model-comparison-deeprubric.png" alt="Training step efficiency comparison between DeepRubric and baselines.">
+        <img class="paper-image wide-image" src="assets/base-model-comparison-deeprubric.png" alt="Training step efficiency comparison between DeepRubric and baselines.">
         <figcaption>DeepRubric reaches competitive open deep-research performance with 140 GRPO update steps.</figcaption>
       </figure>
     </div>

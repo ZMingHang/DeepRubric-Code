@@ -253,36 +253,20 @@ tbody tr:last-child td {
   border-radius: 10px;
 }
 
-.figure .wide-image {
-  width: min(100%, 860px);
-}
-
-.paper-figure {
-  display: block;
-  width: 100%;
-  height: 560px;
-  margin: 0 auto;
-  border: 1px solid var(--line);
-  border-radius: 10px;
+.figure .paper-image {
   background: #ffffff;
 }
 
-.method-figure {
-  height: 620px;
+.figure .intro-image {
+  width: min(100%, 680px);
 }
 
-.analysis-figure {
-  height: 570px;
+.figure .method-image {
+  width: min(100%, 860px);
 }
 
-.compact {
-  width: min(100%, 720px);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.compact-figure {
-  height: 520px;
+.figure .wide-image {
+  width: min(100%, 860px);
 }
 
 figcaption {
@@ -333,18 +317,6 @@ code {
 
   .publication-authors {
     font-size: 1.04rem;
-  }
-
-  .paper-figure {
-    height: 480px;
-  }
-
-  .method-figure {
-    height: 520px;
-  }
-
-  .compact-figure {
-    height: 450px;
   }
 
   .stats-grid {
