@@ -8,171 +8,88 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="hero">
-    <nav class="topbar" aria-label="Primary">
-      <a class="brand" href="#top" aria-label="DeepRubric home">
-        <img src="assets/deeprubric-logo.png" alt="">
-        <span>DeepRubric</span>
-      </a>
-      <div class="navlinks">
-        <a href="#method">Method</a>
-        <a href="#results">Results</a>
-        <a href="#reproduce">Reproduce</a>
-        <a href="#bibtex">BibTeX</a>
-      </div>
-    </nav>
-
-    <section id="top" class="hero-content">
-      <div class="hero-copy">
-        <p class="venue">EMNLP 2026 Submission</p>
-        <h1>DeepRubric: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents</h1>
-        <p class="subtitle">
-          An evidence-first data construction and RL framework that builds query-rubric supervision from retrieved documents before training deep research agents.
-        </p>
-        <p class="authors">
-          Minghang Zhu, Chuyang Wei, Junhao Xu, Yilin Cheng, Zhumin Chen, Jiyan He
-        </p>
-        <div class="cta-row" aria-label="Project links">
-          <a class="button primary" href="#bibtex">Paper</a>
-          <a class="button" href="https://github.com/ZMingHang/DeepRubric-Code">Code</a>
-          <a class="button icon" href="https://github.com/ZMingHang/DeepRubric-Code#readme">
-            <img src="assets/github-logo.png" alt="">
-            README
-          </a>
-          <a class="button icon" href="https://huggingface.co/datasets/inclusionAI/ASearcher-Local-Knowledge">
-            <img src="assets/hf-icon.png" alt="">
-            Assets
-          </a>
-        </div>
-      </div>
-
-      <div class="hero-panel" aria-label="DeepRubric summary metrics">
-        <div class="metric">
-          <span class="value">9,064</span>
-          <span class="label">retained query-rubric pairs</span>
-        </div>
-        <div class="metric">
-          <span class="value">140</span>
-          <span class="label">GRPO update steps</span>
-        </div>
-        <div class="metric">
-          <span class="value">750</span>
-          <span class="label">RL GPU-hours</span>
-        </div>
-        <div class="metric">
-          <span class="value">68.3</span>
-          <span class="label">average over SQAv2, ResearchQA, DRB</span>
-        </div>
-      </div>
-    </section>
-  </header>
-
   <main>
-    <section class="section abstract-section" id="abstract">
-      <div class="section-heading">
-        <p class="eyebrow">Abstract</p>
-        <h2>Generate the task and the reward from the same evidence structure.</h2>
-      </div>
-      <p class="lead">
+    <header class="hero" id="top">
+      <p class="venue">EMNLP 2026 Submission</p>
+      <h1>DeepRubric: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents</h1>
+      <p class="authors">Minghang Zhu, Chuyang Wei, Junhao Xu, Yilin Cheng, Zhumin Chen, Jiyan He</p>
+      <p class="tagline">Build the research task and its rubric from the same retrieved evidence tree, then train a tool-using deep research agent with grounded supervision.</p>
+      <nav class="link-row" aria-label="Project links">
+        <a href="#bibtex">Paper</a>
+        <a href="https://github.com/ZMingHang/DeepRubric-Code">Code</a>
+        <a href="https://github.com/ZMingHang/DeepRubric-Code#readme">README</a>
+        <a href="https://huggingface.co/datasets/inclusionAI/ASearcher-Local-Knowledge">Assets</a>
+      </nav>
+    </header>
+
+    <section class="section" id="abstract">
+      <h2>Abstract</h2>
+      <p>
         Deep research agents synthesize long-form reports by searching and reasoning over retrieved evidence. Rubric-based reinforcement learning can improve these agents, but query-conditioned rubrics often miss latent information needs. DeepRubric reverses this direction: it first builds evidence trees from local corpora, then co-synthesizes aligned research queries and grounded rubric criteria from those trees. The resulting supervision is verified, converted to training data, and used for GRPO training with local search, browse, and scholar tools.
       </p>
     </section>
 
-    <section class="section contributions">
-      <div class="section-heading">
-        <p class="eyebrow">Highlights</p>
-        <h2>What changes compared with query-first rubric generation?</h2>
-      </div>
-      <div class="feature-grid">
-        <article class="feature">
-          <span class="feature-index">01</span>
-          <h3>Evidence-first task construction</h3>
-          <p>Sample seed topics, recursively decompose them into sub-queries, and ground each node in retrieved Wikipedia or OpenScholar evidence.</p>
-        </article>
-        <article class="feature">
-          <span class="feature-index">02</span>
-          <h3>Bottom-up query-rubric synthesis</h3>
-          <p>Selected evidence leaves are merged into a coherent research query while producing atomic factual and logical rubric criteria.</p>
-        </article>
-        <article class="feature">
-          <span class="feature-index">03</span>
-          <h3>Verifier-constrained revision</h3>
-          <p>A separate audit step returns KEEP, REVISE, or DROP while requiring revised factual criteria to stay grounded in selected tree leaves.</p>
-        </article>
-        <article class="feature">
-          <span class="feature-index">04</span>
-          <h3>Local-tool RL loop</h3>
-          <p>Training rollouts use local search, browse, and scholar tools backed by the same corpora used to build the supervision.</p>
-        </article>
+    <section class="section" id="overview">
+      <h2>Overview</h2>
+      <div class="overview-figure" aria-label="DeepRubric pipeline">
+        <div class="step">
+          <span>1</span>
+          <strong>Retrieve</strong>
+          <p>Collect Wikipedia and OpenScholar evidence with local retrievers.</p>
+        </div>
+        <div class="arrow" aria-hidden="true"></div>
+        <div class="step">
+          <span>2</span>
+          <strong>Build trees</strong>
+          <p>Expand seed topics into evidence trees with selected leaves.</p>
+        </div>
+        <div class="arrow" aria-hidden="true"></div>
+        <div class="step">
+          <span>3</span>
+          <strong>Synthesize</strong>
+          <p>Generate research queries and factual/logical rubric criteria.</p>
+        </div>
+        <div class="arrow" aria-hidden="true"></div>
+        <div class="step">
+          <span>4</span>
+          <strong>Train</strong>
+          <p>Run GRPO with search, browse, scholar, citation, and rubric rewards.</p>
+        </div>
       </div>
     </section>
 
     <section class="section" id="method">
-      <div class="section-heading">
-        <p class="eyebrow">Method</p>
-        <h2>The DeepRubric pipeline</h2>
+      <h2>Method</h2>
+      <div class="columns">
+        <article>
+          <h3>Evidence-first construction</h3>
+          <p>DeepRubric samples seed topics, recursively decomposes them into sub-queries, and grounds each node in retrieved evidence before any query-rubric pair is generated.</p>
+        </article>
+        <article>
+          <h3>Rubric co-generation</h3>
+          <p>Selected evidence leaves are merged into a coherent research query while producing atomic factual and logical criteria that remain tied to source evidence.</p>
+        </article>
+        <article>
+          <h3>Closed-loop training</h3>
+          <p>The same retriever endpoints used during data construction are exposed to the training agent through search, browse, and scholar tools.</p>
+        </article>
       </div>
-      <div class="pipeline" aria-label="DeepRubric method pipeline">
-        <div class="stage">
-          <div class="stage-kicker">Stage 1</div>
-          <h3>Evidence Tree</h3>
-          <p>Seed topic -> recursive decomposition -> retrieval and evidence extraction.</p>
-          <div class="mini-tree" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span>
-          </div>
-        </div>
-        <div class="connector" aria-hidden="true"></div>
-        <div class="stage">
-          <div class="stage-kicker">Stage 2</div>
-          <h3>Co-Generation</h3>
-          <p>Merge selected leaves into a research query and typed rubric criteria.</p>
-          <div class="rubric-stack" aria-hidden="true">
-            <span>R1 factual</span>
-            <span>R2 logical</span>
-            <span>R3 factual</span>
-          </div>
-        </div>
-        <div class="connector" aria-hidden="true"></div>
-        <div class="stage">
-          <div class="stage-kicker">Stage 3</div>
-          <h3>Rubric RL</h3>
-          <p>Train Qwen3-8B with GRPO using rubric, citation, format, and search rewards.</p>
-          <div class="reward-bars" aria-hidden="true">
-            <span style="--w: 92%"></span>
-            <span style="--w: 68%"></span>
-            <span style="--w: 46%"></span>
-          </div>
-        </div>
-      </div>
+    </section>
 
-      <div class="method-details">
-        <div>
-          <h3>Tree statistics</h3>
-          <ul>
-            <li>9,838 generated evidence trees</li>
-            <li>54.5 nodes and 38.7 leaves per tree on average</li>
-            <li>5.0 selected leaves per retained example</li>
-          </ul>
-        </div>
-        <div>
-          <h3>Rubric statistics</h3>
-          <ul>
-            <li>9,064 retained examples after verification</li>
-            <li>7.0 rubric criteria per example on average</li>
-            <li>58.4% factual and 41.6% logical criteria</li>
-          </ul>
-        </div>
+    <section class="section" id="data">
+      <h2>Data</h2>
+      <div class="stats">
+        <div><strong>9,838</strong><span>generated evidence trees</span></div>
+        <div><strong>9,064</strong><span>retained query-rubric pairs</span></div>
+        <div><strong>7.0</strong><span>rubric criteria per example</span></div>
+        <div><strong>5.0</strong><span>selected leaves per retained example</span></div>
       </div>
     </section>
 
     <section class="section" id="results">
-      <div class="section-heading">
-        <p class="eyebrow">Results</p>
-        <h2>Competitive open deep research with far fewer RL updates.</h2>
-      </div>
-
-      <div class="result-table-wrap">
-        <table class="result-table">
+      <h2>Results</h2>
+      <div class="table-wrap">
+        <table>
           <thead>
             <tr>
               <th>Model</th>
@@ -211,78 +128,28 @@
           </tbody>
         </table>
       </div>
-
-      <div class="figure-block">
+      <figure>
         <img src="assets/training-efficiency.png" alt="Training step efficiency comparison between DeepRubric and baselines.">
-        <p>Training-step efficiency: DeepRubric reaches competitive performance in 140 GRPO steps.</p>
-      </div>
-
-      <div class="feature-grid compact">
-        <article class="feature">
-          <span class="feature-index">13.6x</span>
-          <h3>fewer RL steps</h3>
-          <p>140 DeepRubric GRPO updates versus 1,900 updates for the closest rubric-RL baseline.</p>
-        </article>
-        <article class="feature">
-          <span class="feature-index">17x</span>
-          <h3>lower estimated training cost</h3>
-          <p>Approximately $1.7K end-to-end cost versus at least $30K for the matched baseline.</p>
-        </article>
-        <article class="feature">
-          <span class="feature-index">+27.7</span>
-          <h3>average gain over search-only base</h3>
-          <p>Three-benchmark average improves from 40.6 to 68.3 using the same 8B backbone family.</p>
-        </article>
-      </div>
+        <figcaption>DeepRubric reaches competitive open deep-research performance with 140 GRPO update steps.</figcaption>
+      </figure>
     </section>
 
     <section class="section" id="reproduce">
-      <div class="section-heading">
-        <p class="eyebrow">Reproduction</p>
-        <h2>From retriever deployment to training startup.</h2>
-      </div>
-      <div class="repro-grid">
-        <div class="repro-step">
-          <span>1</span>
-          <h3>Download assets</h3>
-          <p>Fetch ASearcher local Wikipedia knowledge and OpenScholar datastore, then set virtual paths such as <code>WIKI_RETRIEVER_ROOT</code>.</p>
-        </div>
-        <div class="repro-step">
-          <span>2</span>
-          <h3>Deploy retrievers</h3>
-          <p>Run local Wikipedia and OpenScholar retrieval endpoints for <code>search</code>, <code>browse</code>, and <code>scholar</code>.</p>
-        </div>
-        <div class="repro-step">
-          <span>3</span>
-          <h3>Construct and verify data</h3>
-          <p>Build evidence trees, run KEEP/REVISE/DROP verification, and export verified query-rubric JSONL.</p>
-        </div>
-        <div class="repro-step">
-          <span>4</span>
-          <h3>Train</h3>
-          <p>Convert JSONL to verl-tool parquet and start GRPO training with the same retriever endpoints.</p>
-        </div>
-      </div>
-      <pre class="command"><code>START_RETRIEVERS=1 bash scripts/run_pipeline.sh</code></pre>
-      <p class="note">The code release keeps large corpora, indexes, generated datasets, checkpoints, and private configs out of the repository. Paths in the scripts are intentionally written as <code>/path/to/...</code> placeholders.</p>
+      <h2>Reproduce</h2>
+      <p>
+        The release contains scripts for deploying retrievers, constructing data, converting verified examples, and starting GRPO training. Large corpora, indexes, generated datasets, checkpoints, logs, and private service configs are intentionally excluded.
+      </p>
+      <pre><code>START_RETRIEVERS=1 bash scripts/run_pipeline.sh</code></pre>
     </section>
 
     <section class="section" id="bibtex">
-      <div class="section-heading">
-        <p class="eyebrow">Citation</p>
-        <h2>BibTeX</h2>
-      </div>
-      <pre class="bibtex"><code>@misc{deeprubric2026,
+      <h2>BibTeX</h2>
+      <pre><code>@misc{deeprubric2026,
   title  = {DeepRubric: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents},
   author = {Zhu, Minghang and Wei, Chuyang and Xu, Junhao and Cheng, Yilin and Chen, Zhumin and He, Jiyan},
   year   = {2026}
 }</code></pre>
     </section>
   </main>
-
-  <footer class="footer">
-    <span>DeepRubric</span>
-    <a href="#top">Back to top</a>
-  </footer>
 </body>
 </html>
