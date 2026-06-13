@@ -1,15 +1,20 @@
 # Retrievers
 
-This directory contains launch wrappers for the local retrievers used by DeepRubric.
+This directory contains the local retriever services used by DeepRubric.
 
-The code release does not vendor the large retrieval indexes. Download the external assets described in the root `README.md`, then point the scripts to your local copies with environment variables.
+The release vendors the lightweight serving code needed to start the retrievers. It does **not** vendor the large corpora, embedding models, FAISS indexes, or OpenScholar datastore files. Download the external data assets described in the root `README.md`, then point the scripts to your local copies with environment variables.
 
 ## Layout
 
 ```text
 retrievers/
-  wiki/launch_local_server.sh        # Wikipedia retriever wrapper
-  openscholar/start_single_node.sh   # OpenScholar retriever wrapper
+  wiki/
+    launch_local_server.sh           # Starts the vendored ASearcher local FastAPI server
+    code/local_retrieval_server.py   # Vendored Wikipedia retrieval server code
+
+  openscholar/
+    start_single_node.sh             # Starts the vendored OpenScholar FastAPI worker
+    retrieval-scaling-main/          # Vendored OpenScholar retrieval-scaling server code
 ```
 
 ## Endpoints
@@ -40,13 +45,11 @@ bash retrievers/openscholar/start_single_node.sh
 Override paths as needed:
 
 ```bash
-WIKI_CODE_ROOT=/path/to/ASearcher-main \
-WIKI_CORPUS_PATH=/path/to/ASearcher-Local-Knowledge/wiki-18.jsonl \
-WIKI_INDEX_PATH=/path/to/ASearcher-Local-Knowledge/e5_Flat.index \
+WIKI_RETRIEVER_ROOT=/path/to/ASearcher-Local-Knowledge \
 bash retrievers/wiki/launch_local_server.sh
 
-OPENSCHOLAR_DATASTORE=/path/to/OpenScholar-DataStore-V3 \
-OPENSCHOLAR_MODEL=/path/to/retriever-or-model \
+OPENSCHOLAR_DATA_ROOT=/path/to/OpenScholar-DataStore-V3 \
 bash retrievers/openscholar/start_single_node.sh
 ```
 
+The Hugging Face links provide data assets only. The server code used by these scripts is included in this directory.

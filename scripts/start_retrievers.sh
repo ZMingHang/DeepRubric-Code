@@ -5,9 +5,8 @@ set -euo pipefail
 # while constructing data or training, because the training tool server calls
 # these endpoints at rollout time.
 
-export WIKI_CODE_ROOT="${WIKI_CODE_ROOT:-/path/to/ASearcher-main}"
 export WIKI_RETRIEVER_ROOT="${WIKI_RETRIEVER_ROOT:-/path/to/ASearcher-Local-Knowledge}"
-export OPENSCHOLAR_API_ROOT="${OPENSCHOLAR_API_ROOT:-/path/to/OpenScholar-main/retriever2/retrieval-scaling-main}"
+export OPENSCHOLAR_DATA_ROOT="${OPENSCHOLAR_DATA_ROOT:-/path/to/OpenScholar-DataStore-V3}"
 export WIKI_RETRIEVER_URL="${WIKI_RETRIEVER_URL:-http://localhost:8888/retrieve}"
 export WIKI_BROWSE_URL="${WIKI_BROWSE_URL:-http://localhost:8888/access}"
 export OPENSCHOLAR_RETRIEVER_URL="${OPENSCHOLAR_RETRIEVER_URL:-http://localhost:8000/search}"

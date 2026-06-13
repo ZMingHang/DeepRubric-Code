@@ -24,11 +24,10 @@ Expected layout:
 Set:
 
 ```bash
-export WIKI_CODE_ROOT=/path/to/ASearcher-main
 export WIKI_RETRIEVER_ROOT=/path/to/ASearcher-Local-Knowledge
 ```
 
-The `WIKI_CODE_ROOT` checkout provides `tools/local_retrieval_server.py`; the corpus, index, webpages, and E5 model are read from `WIKI_RETRIEVER_ROOT`.
+The Wikipedia serving code is vendored at `retrievers/wiki/code/local_retrieval_server.py`; the corpus, index, webpages, and E5 model are read from `WIKI_RETRIEVER_ROOT`.
 
 ## OpenScholar
 
@@ -48,10 +47,9 @@ Set:
 
 ```bash
 export OPENSCHOLAR_DATA_ROOT=/path/to/OpenScholar-DataStore-V3
-export OPENSCHOLAR_API_ROOT=/path/to/OpenScholar-main/retriever2/retrieval-scaling-main
 ```
 
-Use `retrievers/openscholar/start_single_node.sh` after configuring the OpenScholar Hydra config for your index paths.
+The OpenScholar retrieval-scaling serving code is vendored at `retrievers/openscholar/retrieval-scaling-main/`. `retrievers/openscholar/start_single_node.sh` passes `OPENSCHOLAR_DATA_ROOT` into the vendored Hydra config for your datastore and index paths.
 
 ## Default Endpoints
 

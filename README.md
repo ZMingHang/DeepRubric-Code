@@ -30,8 +30,8 @@ For detailed setup and usage notes, see the README files in each subdirectory.
 Prepare these external resources before running the full pipeline:
 
 - A Python environment for data construction and `training/verl-tool`.
-- A local Wikipedia retriever built from ASearcher assets.
-- A local OpenScholar retriever/datastore.
+- Downloaded ASearcher local Wikipedia assets.
+- Downloaded OpenScholar datastore assets.
 - An OpenAI-compatible LLM endpoint for query/rubric synthesis and verification.
 - A model checkpoint and GPUs for GRPO training.
 
@@ -89,7 +89,7 @@ Install data-construction dependencies in the same environment or a separate one
 pip install openai aiohttp requests numpy pandas tqdm transformers datasets fastapi uvicorn
 ```
 
-The retriever servers additionally require their own dependencies, including FAISS, PyTorch, and the dependencies from the ASearcher and OpenScholar retrieval codebases.
+The vendored retriever servers additionally require their own dependencies, including FAISS, PyTorch, Transformers, FastAPI, Hydra/OmegaConf, and SentenceTransformers.
 
 Configure an OpenAI-compatible endpoint for evidence-tree construction and quality verification:
 
@@ -124,19 +124,16 @@ bash scripts/run_pipeline.sh
 
 ## External Assets
 
-Download the external retriever assets and code:
+Download the external retriever data assets:
 
-- ASearcher code for the local Wikipedia retriever: <https://github.com/inclusionAI/ASearcher>
 - Wikipedia retriever assets: <https://huggingface.co/datasets/inclusionAI/ASearcher-Local-Knowledge>
 - OpenScholar datastore: <https://huggingface.co/datasets/OpenSciLM/OpenScholar-DataStore-V3>
 
-Set paths to your local copies. The defaults in the scripts are virtual placeholders and must be replaced for a real run:
+The retriever server code is included under `retrievers/`. Set paths to your local data copies. The defaults in the scripts are virtual placeholders and must be replaced for a real run:
 
 ```bash
-export WIKI_CODE_ROOT=/path/to/ASearcher-main
 export WIKI_RETRIEVER_ROOT=/path/to/ASearcher-Local-Knowledge
 export OPENSCHOLAR_DATA_ROOT=/path/to/OpenScholar-DataStore-V3
-export OPENSCHOLAR_API_ROOT=/path/to/OpenScholar-main/retriever2/retrieval-scaling-main
 ```
 
 Expected Wikipedia layout:
@@ -150,7 +147,7 @@ $WIKI_RETRIEVER_ROOT/
   e5-base-v2/
 ```
 
-For OpenScholar, configure the retrieval-scaling Hydra config under `OPENSCHOLAR_API_ROOT` so it points to your local datastore and index files.
+For OpenScholar, `retrievers/openscholar/start_single_node.sh` passes `OPENSCHOLAR_DATA_ROOT` into the vendored Hydra config so it points to your local datastore and index files.
 
 Set the default endpoints used by both data construction and training:
 

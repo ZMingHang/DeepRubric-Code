@@ -6,10 +6,8 @@ set -euo pipefail
 # retriever services are already running. Set START_RETRIEVERS=1 to launch them
 # from this script as part of the same run.
 
-export WIKI_CODE_ROOT="${WIKI_CODE_ROOT:-/path/to/ASearcher-main}"
 export WIKI_RETRIEVER_ROOT="${WIKI_RETRIEVER_ROOT:-/path/to/ASearcher-Local-Knowledge}"
 export OPENSCHOLAR_DATA_ROOT="${OPENSCHOLAR_DATA_ROOT:-/path/to/OpenScholar-DataStore-V3}"
-export OPENSCHOLAR_API_ROOT="${OPENSCHOLAR_API_ROOT:-/path/to/OpenScholar-main/retriever2/retrieval-scaling-main}"
 export OPENAI_BASE_URL="${OPENAI_BASE_URL:-http://localhost:8008/v1}"
 export OPENAI_API_KEY="${OPENAI_API_KEY:-EMPTY}"
 export WIKI_RETRIEVER_URL="${WIKI_RETRIEVER_URL:-http://localhost:8888/retrieve}"
