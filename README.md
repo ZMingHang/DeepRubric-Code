@@ -1,14 +1,43 @@
-# DeepRubric
+<div align="center">
+<img src="docs/assets/deeprubric-logo.png" alt="DeepRubric" width="180"/>
 
-Code release for **DeepRubric: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents**.
+# DeepRubric: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents
 
-DeepRubric builds query-rubric supervision from retrieved evidence before reinforcement learning. The pipeline first constructs evidence trees from local Wikipedia and OpenScholar corpora, synthesizes grounded research queries and rubric criteria from those trees, verifies the synthesized samples, converts them to verl-tool parquet data, and starts GRPO training for a tool-using deep research agent.
+[**Project Page**](https://zminghang.github.io/DeepRubric-Code/) • [**Data Guide**](docs/DATA.md) • [**Retriever Setup**](retrievers/) • [**Data Construction**](data_construction/) • [**Data Conversion**](data_conversion/) • [**Training Code**](training/verl-tool/)
+</div>
 
-Large corpora, FAISS indexes, generated datasets, model checkpoints, logs, and private service configs are not included in this repository.
+DeepRubric is an evidence-first data construction and reinforcement-learning pipeline for deep research agents. It builds grounded query-rubric supervision from local retrieval corpora, filters or revises the generated samples, converts them into verl-tool training data, and then trains a tool-using agent with the same retriever endpoints.
 
-## Closed-Loop Pipeline
+This repository contains the code, scripts, and command templates needed to reproduce the pipeline. It does not include large corpora, FAISS indexes, generated datasets, model checkpoints, logs, or private service configs.
 
-The release is organized as a reproducible loop:
+<div align="center">
+<img src="docs/assets/method-overview.png" alt="DeepRubric method overview" width="820"/>
+</div>
+
+## Overview
+
+This repository contains four main components:
+
+- **[`retrievers/`](retrievers/)**: Launch wrappers for the local Wikipedia and OpenScholar retrievers used by both data construction and training.
+- **[`data_construction/`](data_construction/)**: Evidence-tree expansion, query/rubric synthesis, and LLM-based KEEP/REVISE/DROP verification.
+- **[`data_conversion/`](data_conversion/)**: Converters from verified evidence-tree records to verl-tool JSONL and parquet datasets.
+- **[`training/verl-tool/`](training/verl-tool/)**: Sanitized verl-tool training code and DeepRubric GRPO entrypoints.
+
+For detailed setup and usage notes, see the README files in each subdirectory.
+
+## External Requirements
+
+Prepare these external resources before running the full pipeline:
+
+- A Python environment for data construction and `training/verl-tool`.
+- A local Wikipedia retriever built from ASearcher assets.
+- A local OpenScholar retriever/datastore.
+- An OpenAI-compatible LLM endpoint for query/rubric synthesis and verification.
+- A model checkpoint and GPUs for GRPO training.
+
+## Reproduction Workflow
+
+The reproduction path is a single closed loop:
 
 ```text
 download retriever assets
@@ -19,7 +48,17 @@ download retriever assets
   -> launch verl-tool GRPO training
 ```
 
-The same retriever endpoints are used in data construction and training:
+Each stage has a concrete input and output:
+
+| Stage | Main code | Input | Output |
+| --- | --- | --- | --- |
+| Deploy retrievers | `scripts/start_retrievers.sh`, `retrievers/` | Downloaded Wikipedia and OpenScholar assets | Local HTTP retriever endpoints |
+| Construct evidence trees | `data_construction/recursive_qa_agent_v4.py`, `data_construction/recursive_qa_agent_v44.py` | Retriever endpoints, corpus pages, LLM endpoint | `outputs/*_evidence_trees/` |
+| Verify samples | `data_construction/recursive_qa_quality_filter.py` | Evidence-tree records | `outputs/verified_trees/*.jsonl` |
+| Convert training data | `data_conversion/` | Verified tree JSONL | `data/query_1001.jsonl`, `train.parquet`, `test.parquet` |
+| Train agent | `training/verl-tool/` | Parquet data, model checkpoint, retrievers | GRPO checkpoints and logs |
+
+The same retriever services are intentionally reused during data construction and RL training:
 
 | Use | Environment variable | Default endpoint |
 | --- | --- | --- |
@@ -29,40 +68,14 @@ The same retriever endpoints are used in data construction and training:
 | OpenScholar retrieval for tree construction | `OPENSCHOLAR_RETRIEVER_URL` | `http://localhost:8000/search` |
 | OpenScholar retrieval for training `scholar` tool | `SCHOLAR_URL` | `http://localhost:8000/search` |
 
-## Repository Structure
+## Quick Start
 
-```text
-DeepRubric-code/
-  README.md
-  docs/DATA.md
-  scripts/
-    start_retrievers.sh
-    run_pipeline.sh
-
-  retrievers/
-    wiki/launch_local_server.sh
-    openscholar/start_single_node.sh
-
-  data_construction/
-    recursive_qa_agent_v4.py       # Wikipedia evidence-tree construction
-    recursive_qa_agent_v44.py      # OpenScholar evidence-tree construction
-    recursive_qa_quality_filter.py # LLM verifier and revision exporter
-    qa_synthesis_agent_openai_v9.py
-    prompt.py
-
-  data_conversion/
-    read_form_tree_revise.py
-    preprocess_search_r1_dataset_tool.py
-
-  training/verl-tool/
-    Sanitized verl-tool training code and DeepRubric GRPO entrypoints.
-```
-
-## Setup
-
-Install the training stack:
+Clone the repository and install the training stack in your preferred Python or conda environment:
 
 ```bash
+git clone https://github.com/ZMingHang/DeepRubric-Code.git
+cd DeepRubric-Code
+
 cd training/verl-tool
 pip install -r requirements.txt
 pip install -e ./verl
@@ -70,7 +83,7 @@ pip install -e .
 cd ../..
 ```
 
-Install data-construction dependencies in the same or another environment:
+Install data-construction dependencies in the same environment or a separate one:
 
 ```bash
 pip install openai aiohttp requests numpy pandas tqdm transformers datasets fastapi uvicorn
@@ -94,6 +107,20 @@ export QA_MODEL=deepseek/deepseek-chat
 export EXTRACT_MODEL=Qwen/Qwen3.5-35B-A3B-Instruct
 export JUDGE_MODEL=gpt-5.1
 ```
+
+After setting the asset paths and endpoint URLs below, the full command template is:
+
+```bash
+START_RETRIEVERS=1 bash scripts/run_pipeline.sh
+```
+
+If the retrievers are already running in another terminal, use:
+
+```bash
+bash scripts/run_pipeline.sh
+```
+
+`scripts/run_pipeline.sh` is a reproduction template. Check local paths, model names, retriever ports, and GPU settings before using it for a full run.
 
 ## External Assets
 
@@ -286,21 +313,9 @@ tool_search_multi,tool_browse,tool_scholar_multi
 
 Those tools call the external retriever endpoints above during rollout.
 
-## One-Command Reproduction Template
+## Full Pipeline Script
 
-After setting all paths and endpoints, run the whole chain:
-
-```bash
-START_RETRIEVERS=1 bash scripts/run_pipeline.sh
-```
-
-If the retrievers are already running in another terminal, run:
-
-```bash
-bash scripts/run_pipeline.sh
-```
-
-The script runs:
+The Quick Start command is a wrapper around the step-by-step workflow above. It runs:
 
 ```text
 retriever startup, if START_RETRIEVERS=1
@@ -311,8 +326,6 @@ retriever startup, if START_RETRIEVERS=1
   -> parquet conversion
   -> GRPO training startup
 ```
-
-Check paths, model names, retriever ports, and GPU settings before using it for a full paper-scale run.
 
 ## Notes
 
