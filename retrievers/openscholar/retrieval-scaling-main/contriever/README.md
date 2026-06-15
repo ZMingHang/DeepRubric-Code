@@ -745,7 +745,7 @@ python train.py \
         --momentum 0.9995 --moco_queue 131072 --temperature 0.05 \
         --warmup_steps 20000 --total_steps 500000 --lr 0.00005 \
         --scheduler linear --optim adamw --per_gpu_batch_size 64 \
-        --output_dir /checkpoint/gizacard/contriever/xling/contriever \
+        --output_dir outputs/contriever/xling/contriever \
 
 ```
 </details>
@@ -767,7 +767,7 @@ python train.py \
         --momentum 0.999 --moco_queue 32768 --temperature 0.05 \
         --warmup_steps 20000 --total_steps 500000 --lr 0.00005 \
         --scheduler linear --optim adamw --per_gpu_batch_size 64 \
-        --output_dir /checkpoint/gizacard/contriever/xling/mcontriever \
+        --output_dir outputs/contriever/xling/mcontriever \
 ```
 
 </details>

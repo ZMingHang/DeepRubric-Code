@@ -3,7 +3,7 @@
 
 # DeepRubric: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents
 
-[**Project Page**](https://zminghang.github.io/DeepRubric-Code/) • [**Data Guide**](docs/DATA.md) • [**Retriever Setup**](retrievers/) • [**Data Construction**](data_construction/) • [**Data Conversion**](data_conversion/) • [**Training Code**](training/verl-tool/)
+[**Project Page**](https://zminghang.github.io/DeepRubric-Code/) • [**Model**](https://huggingface.co/orange101/DeepRubric) • [**Dataset**](https://huggingface.co/datasets/orange101/DeepRubric-dataset) • [**Data Guide**](docs/DATA.md) • [**Retriever Setup**](retrievers/) • [**Data Construction**](data_construction/) • [**Data Conversion**](data_conversion/) • [**Training Code**](training/verl-tool/)
 </div>
 
 DeepRubric is an evidence-first data construction and reinforcement-learning pipeline for deep research agents. It builds grounded query-rubric supervision from local retrieval corpora, filters or revises the generated samples, converts them into verl-tool training data, and then trains a tool-using agent with the same retriever endpoints.
@@ -124,8 +124,10 @@ bash scripts/run_pipeline.sh
 
 ## External Assets
 
-Download the external retriever data assets:
+Download the released DeepRubric assets and external retriever data assets:
 
+- Model checkpoint: <https://huggingface.co/orange101/DeepRubric>
+- DeepRubric dataset: <https://huggingface.co/datasets/orange101/DeepRubric-dataset>
 - Wikipedia retriever assets: <https://huggingface.co/datasets/inclusionAI/ASearcher-Local-Knowledge>
 - OpenScholar datastore: <https://huggingface.co/datasets/OpenSciLM/OpenScholar-DataStore-V3>
 
@@ -278,6 +280,7 @@ Keep the retrievers running, then launch training:
 cd training/verl-tool
 
 export MODEL_PATH=Qwen/Qwen3-8B
+export PYTHON_BIN=/path/to/verl-tool-env/bin/python
 export DATASET_NAME=deeprubric
 export N_GPUS_PER_NODE=8
 export TRAIN_BATCH_SIZE=64
@@ -297,6 +300,7 @@ export TRAIN_DATA=/path/to/train.parquet
 export VAL_DATA=/path/to/test.parquet
 export CHECKPOINT_DIR=/path/to/checkpoints
 export LOG_DIR=/path/to/logs
+export PYTHON_BIN=/path/to/verl-tool-env/bin/python
 export TOOL_SERVER_HOST=0.0.0.0
 export TOOL_SERVER_PORT=30500
 export WORKERS_PER_TOOL=16

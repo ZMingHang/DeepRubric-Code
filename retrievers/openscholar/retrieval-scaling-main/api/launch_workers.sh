@@ -9,15 +9,19 @@
 #SBATCH --gres=gpu:1
 #SBATCH --time 120:00:00
 #SBATCH --requeue
-#SBATCH --chdir=/checkpoint/comem/rulin/retrieval-scaling
-#SBATCH --output=/checkpoint/comem/rulin/cache/slurm/slurm-%A_%a.out
+#SBATCH --chdir=.
+#SBATCH --output=logs/slurm-%A_%a.out
 #SBATCH --array=0-12
 
 
 
-cd /checkpoint/comem/rulin/workspace/retrieval-scaling
-source /home/rulin/miniconda3/bin/activate
-conda activate scaling
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR/.."
+
+if [ -n "${CONDA_EXE:-}" ]; then
+    source "$(dirname "$(dirname "$CONDA_EXE")")/etc/profile.d/conda.sh"
+    conda activate "${OPENSCHOLAR_CONDA_ENV:-scaling}"
+fi
 
 
 

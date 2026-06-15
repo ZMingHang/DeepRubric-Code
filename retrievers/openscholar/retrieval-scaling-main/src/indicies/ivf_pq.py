@@ -272,7 +272,8 @@ class IVFPQIndexer(object):
 
 
 def test_build_multi_shard_dpr_wiki():
-    embed_dir = '/fsx-comem/rulin/data/truth_teller/scaling_out/embeddings/facebook/contriever-msmarco/dpr_wiki/1-shards'
+    data_root = os.environ.get("OPENSCHOLAR_DATA_ROOT", "./OpenScholar-DataStore")
+    embed_dir = os.path.join(data_root, "embeddings/facebook/contriever-msmarco/dpr_wiki/1-shards")
     embed_paths = [os.path.join(embed_dir, filename) for filename in os.listdir(embed_dir) if filename.endswith('.pkl')]
     sample_train_size = 6000000
     projection_size = 768
@@ -280,13 +281,13 @@ def test_build_multi_shard_dpr_wiki():
     n_subquantizers = 16
     code_size = 8
     formatted_index_name = f"index_ivf_pq_ip.{sample_train_size}.{projection_size}.{ncentroids}.faiss"
-    index_dir = '/fsx-comem/rulin/data/truth_teller/scaling_out/embeddings/facebook/contriever-msmarco/dpr_wiki/1-shards/index_ivf_pq/'
+    index_dir = os.path.join(embed_dir, "index_ivf_pq")
     os.makedirs(index_dir, exist_ok=True)
     index_path = os.path.join(index_dir, formatted_index_name)
     meta_file = os.path.join(index_dir, formatted_index_name+'.meta')
     trained_index_path = os.path.join(index_dir, formatted_index_name+'.trained')
     pos_map_save_path = os.path.join(index_dir, 'passage_pos_id_map.pkl')
-    passage_dir = '/fsx-comem/rulin/data/truth_teller/scaling_out/passages/dpr_wiki/1-shards'
+    passage_dir = os.path.join(data_root, "passages/dpr_wiki/1-shards")
     index = IVFPQIndexer(
         embed_paths,
         index_path,
@@ -303,7 +304,8 @@ def test_build_multi_shard_dpr_wiki():
 
 
 def test_build_single_shard_dpr_wiki():
-    embed_dir = '/checkpoint/amaia/explore/comem/data/scaling_out/embeddings/facebook/dragon-plus-context-encoder/dpr_wiki/8-shards'
+    data_root = os.environ.get("OPENSCHOLAR_DATA_ROOT", "./OpenScholar-DataStore")
+    embed_dir = os.path.join(data_root, "embeddings/facebook/dragon-plus-context-encoder/dpr_wiki/8-shards")
     embed_paths = [os.path.join(embed_dir, filename) for filename in os.listdir(embed_dir) if filename.endswith('.pkl')]
     sample_train_size = 6000000
     projection_size = 768
@@ -311,13 +313,13 @@ def test_build_single_shard_dpr_wiki():
     n_subquantizers = 16
     code_size = 8
     formatted_index_name = f"index_ivf_pq_ip.{sample_train_size}.{projection_size}.{ncentroids}.faiss"
-    index_dir = '/checkpoint/amaia/explore/comem/data/scaling_out/embeddings/facebook/dragon-plus-context-encoder/dpr_wiki/8-shards/index_ivf_pq/'
+    index_dir = os.path.join(embed_dir, "index_ivf_pq")
     os.makedirs(index_dir, exist_ok=True)
     index_path = os.path.join(index_dir, formatted_index_name)
     meta_file = os.path.join(index_dir, formatted_index_name+'.meta')
     trained_index_path = os.path.join(index_dir, formatted_index_name+'.trained')
     pos_map_save_path = os.path.join(index_dir, 'passage_pos_id_map.pkl')
-    passage_dir = '/fsx-comem/rulin/data/truth_teller/scaling_out/passages/dpr_wiki/8-shards'
+    passage_dir = os.path.join(data_root, "passages/dpr_wiki/8-shards")
     index = IVFPQIndexer(
         embed_paths,
         index_path,

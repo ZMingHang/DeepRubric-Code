@@ -24,7 +24,7 @@ datastore:
   domain: pes2o
   raw_data_path: null
   chunk_size: 256  # chunk size in number of words
-  datastore_root_dir: /path/to/OpenScholar-DataStore
+  datastore_root_dir: ${oc.env:OPENSCHOLAR_DATA_ROOT,/path/to/OpenScholar-DataStore}
 
   embedding:
     raw_data_path: ${datastore.raw_data_path}
@@ -95,7 +95,7 @@ evaluation:
   concate_k: 0    # Number of retrieved passages for concatenation, 0 means LM-only
   max_retrieval_len: 1024
   calibration_out_dir: null
-  eval_output_dir: /mnt/md-256k/scaling_out/retrieved_results/${model.datastore_encoder}/${datastore.domain}_datastore-${datastore.chunk_size}_chunk_size-1of${datastore.embedding.num_shards}_shards/top_${evaluation.search.n_docs}
+  eval_output_dir: ${oc.env:OPENSCHOLAR_OUTPUT_DIR,outputs/retrieved_results}/${model.datastore_encoder}/${datastore.domain}_datastore-${datastore.chunk_size}_chunk_size-1of${datastore.embedding.num_shards}_shards/top_${evaluation.search.n_docs}
   results_only_log_file: ???
   debug_mode: false
   decontamination: false

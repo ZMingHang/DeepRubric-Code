@@ -28,7 +28,7 @@ datastore:
   chunking_strategy: null  # support "fixed_size" or "semantic" or "null"
   keep_raw_metadata: true
   use_passage_pos_id_map: true
-  datastore_root_dir: /fsx-comem/rulin/data/scaling_out
+  datastore_root_dir: ${oc.env:OPENSCHOLAR_DATA_ROOT,./OpenScholar-DataStore}
 
   embedding:
     raw_data_path: ${datastore.raw_data_path}

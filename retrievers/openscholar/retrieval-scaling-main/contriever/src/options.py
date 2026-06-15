@@ -12,7 +12,7 @@ class Options:
     def initialize(self):
         # basic parameters
         self.parser.add_argument(
-            "--output_dir", type=str, default="./checkpoint/my_experiments", help="models are saved here"
+            "--output_dir", type=str, default="outputs/my_experiments", help="models are saved here"
         )
         self.parser.add_argument(
             "--train_data",

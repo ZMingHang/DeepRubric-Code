@@ -44,5 +44,5 @@ srun ~gizacard/anaconda3/envs/pytorch10/bin/python3 ~gizacard/contriever/train.p
         --scheduler linear \
         --optim adamw \
         --per_gpu_batch_size 64 \
-        --output_dir /checkpoint/gizacard/contriever/xling/$name \
+        --output_dir "${CONTRIEVER_OUTPUT_DIR:-outputs/contriever/xling}/$name" \
         --main_port $port \

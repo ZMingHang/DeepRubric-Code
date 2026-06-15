@@ -151,12 +151,18 @@ configuration:
 
 ```bash
 export MODEL_PATH=Qwen/Qwen3-8B
+export PYTHON_BIN=/path/to/verl-tool-env/bin/python
 export DATASET_NAME=deeprubric
 export N_GPUS_PER_NODE=8
 export TRAIN_BATCH_SIZE=64
 
 bash examples/train/deepsearch/train_4b_tool.sh
 ```
+
+The launch scripts prepend this checkout and `./verl` to `PYTHONPATH`, so they
+use the vendored training source before any editable install from another local
+checkout. Set `PYTHON_BIN` to the interpreter in your verl-tool environment if
+you do not install this repository into the environment.
 
 Common overrides:
 
@@ -165,6 +171,7 @@ export TRAIN_DATA=/path/to/train.parquet
 export VAL_DATA=/path/to/test.parquet
 export CHECKPOINT_DIR=/path/to/checkpoints/deepsearch/run_name
 export LOG_DIR=/path/to/logs
+export PYTHON_BIN=/path/to/verl-tool-env/bin/python
 export TOOL_SERVER_HOST=0.0.0.0
 export TOOL_SERVER_PORT=30500
 export WORKERS_PER_TOOL=16

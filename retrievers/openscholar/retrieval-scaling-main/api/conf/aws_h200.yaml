@@ -22,7 +22,7 @@ model:
 
 datastore:
   domain: dpr_wiki
-  raw_data_path: /checkpoint/comem/rulin/data/massiveds_raw_data/dpr_wiki/  # pass a single jsonl file or a dir of jsonl files
+  raw_data_path: ${oc.env:OPENSCHOLAR_RAW_DATA_PATH,./raw_data/dpr_wiki}  # pass a single jsonl file or a dir of jsonl files
   raw_data_key: text
   chunk_size: 256  # chunk size in number of words
   chunking_strategy: fixed_size  # support "fixed_size" or "semantic"
@@ -39,7 +39,7 @@ datastore:
     keep_raw_metadata: ${datastore.keep_raw_metadata}
     use_passage_pos_id_map: ${datastore.use_passage_pos_id_map}
     keep_last_chunk: true
-    passages_dir: /checkpoint/comem/rulin/data/scaling_out/passages/${datastore.domain}/${datastore.embedding.num_shards}-shards
+    passages_dir: ${oc.env:OPENSCHOLAR_DATA_ROOT,./OpenScholar-DataStore}/passages/${datastore.domain}/${datastore.embedding.num_shards}-shards
 
     per_gpu_batch_size: 512
     passage_maxlength: ${datastore.chunk_size}  # need to set to a larger num than chunk size
@@ -51,7 +51,7 @@ datastore:
     normalize_text: False
 
     prefix: "passages"
-    embedding_dir: /checkpoint/comem/rulin/data/scaling_out/embeddings/${model.datastore_encoder}/${datastore.domain}/${datastore.embedding.num_shards}-shards
+    embedding_dir: ${oc.env:OPENSCHOLAR_DATA_ROOT,./OpenScholar-DataStore}/embeddings/${model.datastore_encoder}/${datastore.domain}/${datastore.embedding.num_shards}-shards
     use_saved_if_exists: true
 
   index:
@@ -107,8 +107,8 @@ evaluation:
   max_retrieval_len: 1024
   calibration_out_dir: null
   index_postfix: ${datastore.index.index_type}_${datastore.index.sample_train_size}_${datastore.index.ncentroids}_${datastore.index.n_subquantizers}_${datastore.index.n_bits}
-  eval_output_dir: /checkpoint/comem/rulin/data/scaling_out/retrieved_results/${model.datastore_encoder}/${datastore.domain}_datastore-${datastore.chunk_size}_chunk_size-1of${datastore.embedding.num_shards}_shards-${evaluation.index_postfix}/top_${evaluation.search.n_docs}
-  results_only_log_file: /checkpoint/comem/rulin/data/scaling_out/test_c4_ppl.log
+  eval_output_dir: ${oc.env:OPENSCHOLAR_OUTPUT_DIR,outputs/retrieved_results}/${model.datastore_encoder}/${datastore.domain}_datastore-${datastore.chunk_size}_chunk_size-1of${datastore.embedding.num_shards}_shards-${evaluation.index_postfix}/top_${evaluation.search.n_docs}
+  results_only_log_file: ${oc.env:OPENSCHOLAR_OUTPUT_DIR,outputs}/test_c4_ppl.log
   debug_mode: false
   decontamination: false
   contamination_threshold: 32

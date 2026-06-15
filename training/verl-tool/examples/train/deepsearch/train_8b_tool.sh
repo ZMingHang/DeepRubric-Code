@@ -3,6 +3,8 @@ set -euo pipefail
 set -x
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+export PYTHONPATH="${ROOT_DIR}:${ROOT_DIR}/verl${PYTHONPATH:+:${PYTHONPATH}}"
+PYTHON_BIN="${PYTHON_BIN:-python3}"
 export RAY_TMPDIR="${RAY_TMPDIR:-${ROOT_DIR}/.ray_tmp}"
 mkdir -p "$RAY_TMPDIR"
 
@@ -74,7 +76,7 @@ echo "action_stop_tokens_file=$action_stop_tokens_file"
 host="${TOOL_SERVER_HOST:-$(hostname -i | awk '{print $1}')}"
 port="${TOOL_SERVER_PORT:-$(shuf -i 30000-31000 -n 1)}"
 tool_server_url=http://$host:$port/get_observation
-python -m verl_tool.servers.serve --host "$host" --port "$port" --tool_type "${TOOL_TYPES:-tool_search_multi,tool_browse,tool_scholar_multi}" --workers_per_tool "${WORKERS_PER_TOOL:-16}" --use_ray True &
+"$PYTHON_BIN" -m verl_tool.servers.serve --host "$host" --port "$port" --tool_type "${TOOL_TYPES:-tool_search_multi,tool_browse,tool_scholar_multi}" --workers_per_tool "${WORKERS_PER_TOOL:-16}" --use_ray True &
 server_pid=$!
 cleanup() {
     pkill -P "$server_pid" 2>/dev/null || true
@@ -87,7 +89,7 @@ echo "Server (pid=$server_pid) started at $tool_server_url"
 
 mkdir -p "${LOG_DIR:-${ROOT_DIR}/logs}" "${CHECKPOINT_DIR:-${ROOT_DIR}/checkpoints/deepsearch/${run_name}}"
 
-PYTHONUNBUFFERED=1 python3 -m verl_tool.trainer.main_ppo \
+PYTHONUNBUFFERED=1 "$PYTHON_BIN" -m verl_tool.trainer.main_ppo \
     algorithm.adv_estimator=$rl_alg \
     data.train_files=$train_data \
     data.val_files=$val_data \
