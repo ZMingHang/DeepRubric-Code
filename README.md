@@ -3,7 +3,9 @@
 
 # DeepRubric: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents
 
-[**Project Page**](https://zminghang.github.io/DeepRubric-Code/) • [**Model**](https://huggingface.co/orange101/DeepRubric) • [**Dataset**](https://huggingface.co/datasets/orange101/DeepRubric-dataset) • [**Data Guide**](docs/DATA.md) • [**Retriever Setup**](retrievers/) • [**Data Construction**](data_construction/) • [**Data Conversion**](data_conversion/) • [**Training Code**](training/verl-tool/)
+**Accepted to EMNLP 2026 (Main Conference).**
+
+[**Paper**](https://arxiv.org/abs/2606.17029) • [**Project Page**](https://zminghang.github.io/DeepRubric-Code/) • [**Model**](https://huggingface.co/orange101/DeepRubric) • [**Dataset**](https://huggingface.co/datasets/orange101/DeepRubric-dataset) • [**Data Guide**](docs/DATA.md) • [**Retriever Setup**](retrievers/) • [**Data Construction**](data_construction/) • [**Data Conversion**](data_conversion/) • [**Training Code**](training/verl-tool/)
 </div>
 
 DeepRubric is an evidence-first data construction and reinforcement-learning pipeline for deep research agents. It builds grounded query-rubric supervision from local retrieval corpora, filters or revises the generated samples, converts them into verl-tool training data, and then trains a tool-using agent with the same retriever endpoints.
@@ -337,10 +339,16 @@ retriever startup, if START_RETRIEVERS=1
 
 ## Citation
 
+[arXiv preprint arXiv:2606.17029](https://arxiv.org/abs/2606.17029) (2026).
+
 ```bibtex
-@misc{deeprubric,
-  title = {DeepRubric: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents},
-  author = {Anonymous},
-  year = {2026}
+@misc{zhu2026deeprubricevidencetreerubricsupervision,
+  title         = {{DeepRubric}: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents},
+  author        = {Minghang Zhu and Chuyang Wei and Junhao Xu and Yilin Cheng and Zhumin Chen and Jiyan He},
+  year          = {2026},
+  eprint        = {2606.17029},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url           = {https://arxiv.org/abs/2606.17029}
 }
 ```
