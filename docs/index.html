@@ -7,7 +7,7 @@
   <meta name="description" content="DeepRubric: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents. Accepted to EMNLP 2026 (Main Conference). arXiv:2606.17029.">
   <meta name="theme-color" content="#ffffff">
   <meta property="og:title" content="DeepRubric | EMNLP 2026">
-  <meta property="og:description" content="Evidence-tree rubric supervision for deep research agents. Competitive performance with approximately 13x fewer RL GPU-hours.">
+  <meta property="og:description" content="Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents. EMNLP 2026 Main Conference.">
   <meta property="og:image" content="https://zminghang.github.io/DeepRubric-Code/assets/intro-figure.png">
   <meta property="og:url" content="https://zminghang.github.io/DeepRubric-Code/">
   <meta name="twitter:card" content="summary_large_image">
@@ -50,14 +50,14 @@
           <a class="button" href="https://huggingface.co/orange101/DeepRubric"><span class="icon icon-boxes" aria-hidden="true"></span>Model</a>
           <a class="button" href="https://huggingface.co/datasets/orange101/DeepRubric-dataset"><span class="icon icon-database" aria-hidden="true"></span>Dataset</a>
         </div>
-        <p class="cover-note">Evidence-grounded supervision. More efficient deep research.</p>
+        <p class="cover-note"><a href="https://arxiv.org/abs/2606.17029">arXiv:2606.17029</a></p>
       </div>
     </section>
 
     <section class="highlights" aria-label="Research highlights">
       <div class="container highlight-grid">
         <div class="highlight"><strong>~13<span>&times;</span></strong><div><span class="highlight-label">Less RL compute</span><span class="highlight-detail">GPU-hours vs. DR Tulu-8B</span></div></div>
-        <div class="highlight"><strong>140</strong><div><span class="highlight-label">GRPO update steps</span><span class="highlight-detail">Competitive benchmark results</span></div></div>
+        <div class="highlight"><strong>140</strong><div><span class="highlight-label">GRPO update steps</span><span class="highlight-detail">DeepRubric-8B checkpoint</span></div></div>
         <div class="highlight"><strong>9,064</strong><div><span class="highlight-label">Training examples</span><span class="highlight-detail">Verified query-rubric pairs</span></div></div>
       </div>
     </section>
@@ -65,14 +65,13 @@
     <section class="section" id="overview" aria-labelledby="overview-title">
       <div class="container">
         <div class="section-heading">
-          <div><p class="eyebrow"><span>01</span> The idea</p><h2 id="overview-title">Start with <em>evidence.</em></h2></div>
-          <p class="section-lead">Reliable research rewards begin with criteria that match the question and can be traced back to evidence.</p>
+          <div><p class="eyebrow"><span>01</span> Introduction</p><h2 id="overview-title">Overview</h2></div>
+          <p class="section-lead">DeepRubric generates research queries and evaluation rubrics from evidence retrieved from Wikipedia and OpenScholar.</p>
         </div>
         <div class="overview-layout">
           <div class="overview-copy">
-            <p>DeepRubric builds the evidence first, then derives the research question and its evaluation criteria together.</p>
-            <p>Starting from Wikipedia and OpenScholar, it constructs an evidence tree. The leaves become verifiable targets for aligned query-rubric supervision.</p>
-            <div class="key-insight"><span class="insight-label">The key shift</span><p>One evidence structure.<br>Both the question and the rubric.</p></div>
+            <p>An evidence tree organizes retrieved evidence into sub-questions and atomic evaluation targets.</p>
+            <p>The selected leaves provide the basis for factual and logical rubric criteria. The research query and its rubric are then generated together.</p>
             <a class="text-link" href="https://arxiv.org/abs/2606.17029">Read the full paper <span class="icon icon-arrow-up-right" aria-hidden="true"></span></a>
           </div>
           <figure class="research-figure">
@@ -94,8 +93,8 @@
     <section class="section section-tinted" id="method" aria-labelledby="method-title">
       <div class="container">
         <div class="section-heading">
-          <div><p class="eyebrow"><span>02</span> The method</p><h2 id="method-title">Grounded at every step.</h2></div>
-          <p class="section-lead">From retrieved documents to verifiable evaluation criteria, then to a trained deep research agent.</p>
+          <div><p class="eyebrow"><span>02</span> Method</p><h2 id="method-title">Method Overview</h2></div>
+          <p class="section-lead">The pipeline consists of evidence-tree construction, query-rubric synthesis, and GRPO training.</p>
         </div>
         <ol class="method-steps">
           <li><span class="step-number">01 / CONSTRUCT</span><h3>Build evidence trees</h3><p>Expand a seed topic into sub-questions and retrieve supporting evidence for the atomic leaves.</p></li>
@@ -109,7 +108,7 @@
           </a>
           <figcaption><span class="figure-number">Figure 2</span> The same retriever endpoints connect data construction and agent training.</figcaption>
         </figure>
-        <div class="data-heading"><h3>Supervision, grounded in a shared corpus.</h3><p>Wikipedia + OpenScholar</p></div>
+        <div class="data-heading"><h3>Training Data</h3><p>Wikipedia + OpenScholar</p></div>
         <dl class="data-stats">
           <div><dt>Evidence trees generated</dt><dd>9,838</dd></div><div><dt>Query-rubric pairs retained</dt><dd>9,064</dd></div><div><dt>Criteria per example</dt><dd>7.0</dd></div><div><dt>Selected leaves per example</dt><dd>5.0</dd></div>
         </dl>
@@ -129,8 +128,8 @@
     <section class="section" id="results" aria-labelledby="results-title">
       <div class="container">
         <div class="section-heading">
-          <div><p class="eyebrow"><span>03</span> The results</p><h2 id="results-title">More from less compute.</h2></div>
-          <p class="section-lead">Competitive performance across three research benchmarks, with approximately 750 RL GPU-hours.</p>
+          <div><p class="eyebrow"><span>03</span> Evaluation</p><h2 id="results-title">Experimental Results</h2></div>
+          <p class="section-lead">SQAv2, ResearchQA, and DRB results for DeepRubric-8B and the comparison models.</p>
         </div>
         <div class="results-summary">
           <div class="results-takeaway"><p class="result-value">68.3<span> average score</span></p><p>DeepRubric-8B at 140 GRPO steps.</p></div>
@@ -156,7 +155,7 @@
             <img src="assets/base-model-comparison-deeprubric.png" width="1221" height="563" loading="lazy" alt="SQAv2 and DRB benchmark scores versus RL training steps. DeepRubric reaches competitive performance after 140 updates.">
             <span class="figure-zoom" aria-hidden="true"><span class="icon icon-zoom-in"></span></span>
           </a>
-          <figcaption><span class="figure-number">Figure 3</span> Competitive research performance with fewer policy updates.</figcaption>
+          <figcaption><span class="figure-number">Figure 3</span> Benchmark scores at different numbers of RL training steps.</figcaption>
         </figure>
       </div>
     </section>
@@ -164,21 +163,21 @@
     <section class="section section-tinted" id="resources" aria-labelledby="resources-title">
       <div class="container">
         <div class="section-heading">
-          <div><p class="eyebrow"><span>04</span> Open research</p><h2 id="resources-title">The work, in your hands.</h2></div>
-          <p class="section-lead">Code, model weights, and training data for the DeepRubric research pipeline.</p>
+          <div><p class="eyebrow"><span>04</span> Resources</p><h2 id="resources-title">Code, Model &amp; Dataset</h2></div>
+          <p class="section-lead">Source code, DeepRubric-8B weights, and the training dataset.</p>
         </div>
         <div class="resource-grid">
-          <a class="resource" href="https://github.com/ZMingHang/DeepRubric-Code"><span class="resource-top"><span class="icon icon-github" aria-hidden="true"></span><span class="resource-type">GitHub</span><span class="icon icon-arrow-up-right" aria-hidden="true"></span></span><h3>Code &amp; training</h3><p>Retrievers, evidence construction, data conversion, and GRPO training.</p><span class="resource-bottom">DeepRubric-Code</span></a>
-          <a class="resource" href="https://huggingface.co/orange101/DeepRubric"><span class="resource-top"><span class="icon icon-boxes" aria-hidden="true"></span><span class="resource-type">Hugging Face</span><span class="icon icon-arrow-up-right" aria-hidden="true"></span></span><h3>DeepRubric-8B</h3><p>The released model for tool-using, long-form deep research.</p><span class="resource-bottom">Model weights</span></a>
-          <a class="resource" href="https://huggingface.co/datasets/orange101/DeepRubric-dataset"><span class="resource-top"><span class="icon icon-database" aria-hidden="true"></span><span class="resource-type">Hugging Face</span><span class="icon icon-arrow-up-right" aria-hidden="true"></span></span><h3>Grounded supervision</h3><p>Evidence-backed queries and rubrics for research-agent training.</p><span class="resource-bottom">Training dataset</span></a>
+          <a class="resource" href="https://github.com/ZMingHang/DeepRubric-Code"><span class="resource-top"><span class="icon icon-github" aria-hidden="true"></span><span class="resource-type">GitHub</span><span class="icon icon-arrow-up-right" aria-hidden="true"></span></span><h3>Source code</h3><p>Retrievers, evidence construction, data conversion, and GRPO training.</p><span class="resource-bottom">DeepRubric-Code</span></a>
+          <a class="resource" href="https://huggingface.co/orange101/DeepRubric"><span class="resource-top"><span class="icon icon-boxes" aria-hidden="true"></span><span class="resource-type">Hugging Face</span><span class="icon icon-arrow-up-right" aria-hidden="true"></span></span><h3>DeepRubric-8B</h3><p>8B model trained with rubric-based GRPO.</p><span class="resource-bottom">Model weights</span></a>
+          <a class="resource" href="https://huggingface.co/datasets/orange101/DeepRubric-dataset"><span class="resource-top"><span class="icon icon-database" aria-hidden="true"></span><span class="resource-type">Hugging Face</span><span class="icon icon-arrow-up-right" aria-hidden="true"></span></span><h3>Training dataset</h3><p>Verified research queries with factual and logical rubric criteria.</p><span class="resource-bottom">Query-rubric pairs</span></a>
         </div>
-        <div class="reproduction"><p>From retriever deployment to agent training.</p><a class="text-link" href="https://github.com/ZMingHang/DeepRubric-Code#readme">Reproduction guide <span class="icon icon-arrow-right" aria-hidden="true"></span></a></div>
+        <div class="reproduction"><p>Retriever setup, data construction, and training configurations.</p><a class="text-link" href="https://github.com/ZMingHang/DeepRubric-Code#readme">Reproduction guide <span class="icon icon-arrow-right" aria-hidden="true"></span></a></div>
       </div>
     </section>
 
     <section class="section" id="bibtex" aria-labelledby="citation-title">
       <div class="container citation-layout">
-        <div><p class="eyebrow"><span>05</span> Citation</p><h2 id="citation-title">Cite DeepRubric.</h2><p class="citation-description">arXiv preprint arXiv:2606.17029<br>Accepted to EMNLP 2026<br>Main Conference</p><a class="text-link" href="https://arxiv.org/abs/2606.17029">View on arXiv <span class="icon icon-arrow-up-right" aria-hidden="true"></span></a></div>
+        <div><p class="eyebrow"><span>05</span> Reference</p><h2 id="citation-title">Citation</h2><p class="citation-description">arXiv preprint arXiv:2606.17029<br>Accepted to EMNLP 2026<br>Main Conference</p><a class="text-link" href="https://arxiv.org/abs/2606.17029">View on arXiv <span class="icon icon-arrow-up-right" aria-hidden="true"></span></a></div>
         <div class="citation-code">
           <div class="code-toolbar"><span>BibTeX</span><span class="copy-status" role="status" aria-live="polite"></span><button class="icon-button copy-button" type="button" aria-label="Copy BibTeX citation" title="Copy BibTeX citation" hidden><span class="icon icon-copy" aria-hidden="true"></span></button></div>
           <pre><code id="citation-text">@misc{zhu2026deeprubricevidencetreerubricsupervision,
@@ -195,7 +194,7 @@
     </section>
   </main>
 
-  <footer class="site-footer"><div class="container footer-inner"><a class="wordmark" href="#top"><img src="assets/deeprubric-logo.png" width="30" height="30" alt=""><span>DeepRubric</span></a><p>Evidence-grounded deep research.<span>EMNLP 2026 &middot; Main Conference</span></p><a class="icon-button" href="#top" aria-label="Back to top" title="Back to top"><span class="icon icon-arrow-up" aria-hidden="true"></span></a></div></footer>
+  <footer class="site-footer"><div class="container footer-inner"><a class="wordmark" href="#top"><img src="assets/deeprubric-logo.png" width="30" height="30" alt=""><span>DeepRubric</span></a><p>EMNLP 2026<span>Main Conference</span></p><a class="icon-button" href="#top" aria-label="Back to top" title="Back to top"><span class="icon icon-arrow-up" aria-hidden="true"></span></a></div></footer>
 
   <dialog class="figure-dialog" aria-labelledby="figure-dialog-caption">
     <div class="dialog-toolbar"><span>DeepRubric</span><button class="icon-button figure-resolution" type="button" aria-label="View at full resolution" aria-pressed="false" title="View at full resolution"><span class="icon icon-zoom-in" aria-hidden="true"></span></button><a class="icon-button figure-download" download aria-label="Download figure" title="Download figure"><img src="assets/icons/download.svg" width="18" height="18" alt=""></a><button class="icon-button dialog-close" type="button" aria-label="Close figure" title="Close figure"><span class="icon icon-x" aria-hidden="true"></span></button></div>

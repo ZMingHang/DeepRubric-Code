@@ -116,15 +116,11 @@ h1 span { color: var(--green); }
 .eyebrow { display: flex; gap: 12px; align-items: center; margin-bottom: 13px; color: var(--muted); font-size: 11px; font-weight: 600; text-transform: uppercase; }
 .eyebrow > span { color: var(--green); font-variant-numeric: tabular-nums; }
 h2 { font-family: var(--sans); font-size: 34px; font-weight: 600; line-height: 1.25; text-wrap: balance; }
-h2 em { color: var(--green); font-style: normal; }
 .section-lead { max-width: 490px; color: var(--muted); font-size: 16px; line-height: 1.75; }
 h3 { font-weight: 600; font-size: 18px; line-height: 1.4; }
 .overview-layout { display: grid; grid-template-columns: .7fr 1.3fr; gap: 64px; align-items: center; }
 .overview-copy > p { margin-bottom: 19px; color: var(--muted); font-size: 15px; line-height: 1.8; }
 .overview-copy > p:first-child { color: var(--ink); font-size: 18px; line-height: 1.7; }
-.key-insight { margin: 28px 0; padding: 0 0 0 18px; border-left: 2px solid var(--green); }
-.insight-label { display: block; margin-bottom: 7px; color: var(--green); font-size: 11px; text-transform: uppercase; font-weight: 600; }
-.key-insight p { font-family: var(--sans); font-size: 20px; font-weight: 600; line-height: 1.5; }
 .text-link { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--green); }
 .text-link:hover { text-decoration: underline; text-underline-offset: 4px; }
 .research-figure { min-width: 0; }
@@ -265,7 +261,6 @@ code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; fo
   .overview-copy { display: grid; grid-template-columns: 1fr 1fr; column-gap: 28px; }
   .overview-copy > p { font-size: 14px; }
   .overview-copy > p:first-child { font-size: 17px; }
-  .key-insight { margin: 7px 0; }
   .overview-copy .text-link { align-self: center; justify-self: start; }
   .research-figure { max-width: 680px; margin-inline: auto; }
   .figure-zoom { opacity: 1; }
@@ -315,8 +310,6 @@ code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; fo
   .section-lead { font-size: 14px; }
   .overview-copy { display: block; }
   .overview-copy > p:first-child { font-size: 17px; }
-  .key-insight { margin: 24px 0; }
-  .key-insight p { font-size: 20px; }
   .abstract { margin-top: 28px; }
   .abstract > p { font-size: 13px; }
   .method-steps { grid-template-columns: 1fr; gap: 22px; margin-bottom: 32px; }
