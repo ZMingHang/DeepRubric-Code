@@ -1,6 +1,6 @@
 <div align="center">
 
-<h4><img src="docs/assets/deeprubric-logo.png" alt="" width="20" height="20" align="absmiddle"> <sub>DeepRubric: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents</sub></h4>
+<h2><img src="docs/assets/deeprubric-logo.png" alt="" width="28" height="28" align="absmiddle"> DeepRubric: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents</h2>
 
 **Accepted to EMNLP 2026 &middot; Main Conference**
 
