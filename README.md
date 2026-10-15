@@ -1,10 +1,6 @@
 <div align="center">
 
-<h1><img src="docs/assets/deeprubric-logo.png" alt="" width="36" height="36" align="absmiddle"> DeepRubric</h1>
-
-<p>Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents</p>
-
-<p><sub>Minghang&nbsp;Zhu &middot; Chuyang&nbsp;Wei &middot; Junhao&nbsp;Xu<br>Yilin&nbsp;Cheng &middot; Zhumin&nbsp;Chen &middot; Jiyan&nbsp;He</sub></p>
+<h4><img src="docs/assets/deeprubric-logo.png" alt="" width="20" height="20" align="absmiddle"> <sub>DeepRubric: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents</sub></h4>
 
 **Accepted to EMNLP 2026 &middot; Main Conference**
 
