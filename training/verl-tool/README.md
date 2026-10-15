@@ -56,20 +56,23 @@ eval_service/
 
 ## Environment Setup
 
-Use Python 3.10 or newer. A typical setup is:
+The package manifests declare Python 3.10 or newer. Activate a compatible CUDA/PyTorch environment, then run from this `training/verl-tool/` directory:
 
 ```bash
-conda create -n deeprubric python=3.10 -y
-conda activate deeprubric
-
-pip install -r requirements.txt
-pip install -e ./verl
-pip install -e .
+python -m pip install -e './verl[vllm]'
+python -m pip install -e './verl[gpu]' --no-build-isolation
+python -m pip install -e .
+python -m pip install openai aiohttp requests fastapi uvicorn
 ```
 
-Install optional tool dependencies as needed for your environment. For the
-default deepsearch training path, the important external dependencies are the
-retrieval/browse/scholar services and an OpenAI-compatible judge model endpoint.
+`verl/setup.py` declares the vLLM and GPU extras. The requirements file is
+`verl/requirements.txt`, not `requirements.txt` in this directory. Match the
+FlashAttention build to the installed PyTorch/CUDA stack. These declarations
+are not a complete tested environment lock; see the repository's
+[environment guide](../../docs/ENVIRONMENT.md) for scope and interpreter selection.
+
+The default deepsearch path also needs running retrieval/browse/scholar services
+and an OpenAI-compatible judge model endpoint.
 
 ## Data Format
 
@@ -115,9 +118,9 @@ backends must be provided by the user.
 Set these endpoints before training:
 
 ```bash
-export SEARCH_URL=http://localhost:18881/retrieve
-export BROWSE_URL=http://localhost:18881/access
-export SCHOLAR_URL=http://localhost:8001/search
+export SEARCH_URL=http://localhost:8888/retrieve
+export BROWSE_URL=http://localhost:8888/access
+export SCHOLAR_URL=http://localhost:8000/search
 ```
 
 The default tool list launched by `train_4b_tool.sh` is:
@@ -132,7 +135,7 @@ Rubric and citation rewards use OpenAI-compatible chat-completion APIs:
 
 ```bash
 export OPENAI_API_KEY=EMPTY
-export OPENAI_BASE_URL=http://localhost:8000/v1
+export OPENAI_BASE_URL=http://localhost:8008/v1
 export RUBRIC_JUDGE_MODEL=Qwen/Qwen3-30B-A3B-Instruct-2507
 export CITATION_JUDGE_MODEL=Qwen/Qwen3-30B-A3B-Instruct-2507
 ```

@@ -1,10 +1,8 @@
 <div align="center">
 
-<img src="docs/assets/deeprubric-logo.png" alt="DeepRubric logo" width="88"/>
+<h1><img src="docs/assets/deeprubric-logo.png" alt="" width="36" height="36" align="absmiddle"> DeepRubric</h1>
 
-# DeepRubric
-
-<p><strong>Evidence-Tree Rubric Supervision for Efficient<br>Reinforcement Learning of Deep Research Agents</strong></p>
+<p>Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents</p>
 
 <p><sub>Minghang&nbsp;Zhu &middot; Chuyang&nbsp;Wei &middot; Junhao&nbsp;Xu<br>Yilin&nbsp;Cheng &middot; Zhumin&nbsp;Chen &middot; Jiyan&nbsp;He</sub></p>
 
@@ -73,13 +71,15 @@ The repository includes retriever server code. Corpora, indexes, training data, 
 
 ### Requirements
 
-Prepare these external resources before running the full pipeline:
+Set up the components needed for your task. Using the released model or dataset does not require rebuilding the data or running GRPO training.
 
-- A Python environment for data construction and `training/verl-tool`.
-- Downloaded ASearcher local Wikipedia assets.
-- Downloaded OpenScholar datastore assets.
-- An OpenAI-compatible LLM endpoint for query/rubric synthesis and verification.
-- A model checkpoint and GPUs for GRPO training.
+| Task | Requirements |
+| :--- | :--- |
+| Construct and convert data | Python 3.10+, data-processing packages, running retrievers, and an OpenAI-compatible LLM endpoint |
+| Serve local retrievers | Wikipedia/OpenScholar assets, PyTorch, GPU-enabled FAISS, and retriever dependencies |
+| Train the agent | A compatible CUDA/PyTorch environment, vendored verl and verl-tool, vLLM, FlashAttention, training data, and retrieval/judge endpoints |
+
+These components can use separate environments. See [Environment Setup](docs/ENVIRONMENT.md) for dependency sources, interpreter selection, and judge configuration. The repository does not include a complete environment lock for reproducing the paper.
 
 <details>
 <summary><strong>Pipeline stages and service endpoints</strong></summary>
@@ -109,26 +109,31 @@ The same retriever services are intentionally reused during data construction an
 <details>
 <summary><strong>Install the training and data-construction dependencies</strong></summary>
 
-Clone the repository and install the training stack in your preferred Python or conda environment:
+Clone the repository:
 
 ```bash
 git clone https://github.com/ZMingHang/DeepRubric-Code.git
 cd DeepRubric-Code
-
-cd training/verl-tool
-pip install -r requirements.txt
-pip install -e ./verl
-pip install -e .
-cd ../..
 ```
 
-Install data-construction dependencies in the same environment or a separate one:
+For data construction and conversion, use a Python 3.10+ environment:
 
 ```bash
-pip install openai aiohttp requests numpy pandas tqdm transformers datasets fastapi uvicorn
+python -m pip install openai aiohttp requests numpy pandas tqdm transformers huggingface-hub pyarrow
 ```
 
-The vendored retriever servers additionally require their own dependencies, including FAISS, PyTorch, Transformers, FastAPI, Hydra/OmegaConf, and SentenceTransformers.
+For training, activate a compatible CUDA/PyTorch environment and install the vendored packages from the repository root:
+
+```bash
+python -m pip install -e './training/verl-tool/verl[vllm]'
+python -m pip install -e './training/verl-tool/verl[gpu]' --no-build-isolation
+python -m pip install -e ./training/verl-tool
+python -m pip install openai aiohttp requests fastapi uvicorn
+```
+
+The `vllm` extra declares the rollout backend; the `gpu` extra includes FlashAttention and Liger Kernel. FlashAttention must match your PyTorch/CUDA stack. The legacy dependency list is `training/verl-tool/verl/requirements.txt`; there is no `training/verl-tool/requirements.txt`.
+
+Retriever serving has separate dependencies, including GPU-enabled FAISS. See [Environment Setup](docs/ENVIRONMENT.md#retriever-serving) before starting the services.
 
 </details>
 
@@ -146,13 +151,22 @@ export OPENAI_API_KEY=EMPTY
 
 Do not bind this LLM service to port `8000` if you use the default OpenScholar retriever, because OpenScholar serves `http://localhost:8000/search`.
 
-Model names can be overridden with:
+Data construction and offline verification use these model variables. The model IDs below are examples and must be available at your endpoint:
 
 ```bash
 export QA_MODEL=deepseek/deepseek-chat
 export EXTRACT_MODEL=Qwen/Qwen3.5-35B-A3B-Instruct
 export JUDGE_MODEL=gpt-5.1
 ```
+
+Training uses separate judge variables; `JUDGE_MODEL` does not configure RL rewards:
+
+```bash
+export RUBRIC_JUDGE_MODEL=Qwen/Qwen3-30B-A3B-Instruct-2507
+export CITATION_JUDGE_MODEL=Qwen/Qwen3-30B-A3B-Instruct-2507
+```
+
+These names are the training code's defaults. Set them to model IDs served by your endpoint. The judges use `OPENAI_BASE_URL` and `OPENAI_API_KEY` unless their endpoint-specific overrides are set. See [LLM services](docs/ENVIRONMENT.md#llm-services).
 
 </details>
 
@@ -196,19 +210,20 @@ export SCHOLAR_URL="$OPENSCHOLAR_RETRIEVER_URL"
 
 ### Run the Pipeline
 
-After installing the dependencies and configuring the [asset paths and endpoints](#asset-paths-and-endpoints), run:
+With retrievers and judge services already running, execute the pipeline from the data-processing environment. If training uses a separate environment, set its interpreter:
+
+```bash
+export PYTHON_BIN=/path/to/verl-tool-env/bin/python
+bash scripts/run_pipeline.sh
+```
+
+If the current environment also contains both retrievers' dependencies, the wrapper can start them:
 
 ```bash
 START_RETRIEVERS=1 bash scripts/run_pipeline.sh
 ```
 
-If the retrievers are already running in another terminal, use:
-
-```bash
-bash scripts/run_pipeline.sh
-```
-
-`scripts/run_pipeline.sh` is a reproduction template. Check local paths, model names, retriever ports, and GPU settings before using it for a full run.
+`scripts/run_pipeline.sh` uses the active `python` for data processing; `PYTHON_BIN` selects the training interpreter only. The retriever launchers use the active `python`/`python3`. Check asset paths, served model IDs, ports, and GPU assignments before running the template.
 
 ## Reproduction Workflow
 

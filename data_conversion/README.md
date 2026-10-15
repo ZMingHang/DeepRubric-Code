@@ -14,8 +14,8 @@ This directory converts verified DeepRubric construction outputs into verl-tool 
 Expected input:
 
 ```text
-data/processed/wiki_verified.jsonl
-data/processed/scholar_verified.jsonl
+outputs/verified_trees/wiki_verified.jsonl
+outputs/verified_trees/scholar_verified.jsonl
 ```
 
 Expected output:
@@ -31,18 +31,18 @@ From the repository root:
 
 ```bash
 python data_conversion/read_form_tree_revise.py \
-  --input data/processed/wiki_verified.jsonl data/processed/scholar_verified.jsonl \
-  --output data/processed/deeprubric_train.jsonl
+  --input-dir outputs/verified_trees \
+  --output-dir data \
+  --output-file query_1001.jsonl
 ```
 
 Then build verl-tool parquet data:
 
 ```bash
 python data_conversion/preprocess_search_r1_dataset_tool.py \
-  --input_file data/processed/deeprubric_train.jsonl \
+  --input_file data/query_1001.jsonl \
   --local_dir training/verl-tool/data/deeprubric \
-  --data_source deeprubric
+  --test_size 10
 ```
 
 The resulting dataset is consumed by `training/verl-tool/examples/train/deepsearch/train_4b_tool.sh` or `train_8b_tool.sh`.
-
