@@ -1,33 +1,77 @@
 <div align="center">
-<img src="docs/assets/deeprubric-logo.png" alt="DeepRubric" width="180"/>
 
-# DeepRubric: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents
+<img src="docs/assets/deeprubric-logo.png" alt="DeepRubric logo" width="88"/>
 
-**Accepted to EMNLP 2026 (Main Conference).**
+# DeepRubric
 
-[**Paper**](https://arxiv.org/abs/2606.17029) • [**Project Page**](https://zminghang.github.io/DeepRubric-Code/) • [**Model**](https://huggingface.co/orange101/DeepRubric) • [**Dataset**](https://huggingface.co/datasets/orange101/DeepRubric-dataset) • [**Data Guide**](docs/DATA.md) • [**Retriever Setup**](retrievers/) • [**Data Construction**](data_construction/) • [**Data Conversion**](data_conversion/) • [**Training Code**](training/verl-tool/)
-</div>
+<p><strong>Evidence-Tree Rubric Supervision for Efficient<br>Reinforcement Learning of Deep Research Agents</strong></p>
 
-DeepRubric is an evidence-first data construction and reinforcement-learning pipeline for deep research agents. It builds grounded query-rubric supervision from local retrieval corpora, filters or revises the generated samples, converts them into verl-tool training data, and then trains a tool-using agent with the same retriever endpoints.
+<p><sub>Minghang&nbsp;Zhu &middot; Chuyang&nbsp;Wei &middot; Junhao&nbsp;Xu<br>Yilin&nbsp;Cheng &middot; Zhumin&nbsp;Chen &middot; Jiyan&nbsp;He</sub></p>
 
-This repository contains the code, scripts, and command templates needed to reproduce the pipeline. It does not include large corpora, FAISS indexes, generated datasets, model checkpoints, logs, or private service configs.
+**Accepted to EMNLP 2026 &middot; Main Conference**
 
-<div align="center">
-<img src="docs/assets/method-overview.png" alt="DeepRubric method overview" width="820"/>
+<p>
+  <a href="https://arxiv.org/abs/2606.17029"><img src="https://img.shields.io/badge/arXiv-2606.17029-B31B1B?style=flat-square&amp;logo=arxiv&amp;logoColor=white" alt="Paper: arXiv 2606.17029"></a>
+  <a href="https://zminghang.github.io/DeepRubric-Code/"><img src="https://img.shields.io/badge/Project-Website-076957?style=flat-square" alt="Project website"></a>
+  <a href="https://huggingface.co/orange101/DeepRubric"><img src="https://img.shields.io/badge/Hugging_Face-Model-FFD21E?style=flat-square&amp;logo=huggingface&amp;logoColor=white" alt="Hugging Face model"></a>
+  <a href="https://huggingface.co/datasets/orange101/DeepRubric-dataset"><img src="https://img.shields.io/badge/Hugging_Face-Dataset-3767A8?style=flat-square&amp;logo=huggingface&amp;logoColor=white" alt="Hugging Face dataset"></a>
+</p>
+
+[Overview](#overview) &nbsp;&middot;&nbsp; [Results](#results) &nbsp;&middot;&nbsp; [Downloads](#downloads) &nbsp;&middot;&nbsp; [Quick Start](#quick-start) &nbsp;&middot;&nbsp; [Reproduction](#reproduction-workflow) &nbsp;&middot;&nbsp; [Citation](#citation)
+
 </div>
 
 ## Overview
 
-This repository contains four main components:
+DeepRubric constructs evidence trees from Wikipedia and OpenScholar, then generates research queries and evaluation rubrics from the same evidence. Verified query-rubric pairs are used to train DeepRubric-8B with rubric-based GRPO.
 
-- **[`retrievers/`](retrievers/)**: Launch wrappers for the local Wikipedia and OpenScholar retrievers used by both data construction and training.
-- **[`data_construction/`](data_construction/)**: Evidence-tree expansion, query/rubric synthesis, and LLM-based KEEP/REVISE/DROP verification.
-- **[`data_conversion/`](data_conversion/)**: Converters from verified evidence-tree records to verl-tool JSONL and parquet datasets.
-- **[`training/verl-tool/`](training/verl-tool/)**: Sanitized verl-tool training code and DeepRubric GRPO entrypoints.
+| RL training compute | GRPO update steps | Verified training pairs |
+| :---: | :---: | :---: |
+| **~750 GPU-hours** | **140** | **9,064** |
 
-For detailed setup and usage notes, see the README files in each subdirectory.
+### Method
 
-## External Requirements
+<div align="center">
+<img src="docs/assets/method-overview.png" alt="DeepRubric: evidence-tree construction, query-rubric synthesis and revision, and GRPO training with rubric rewards" width="860"/>
+</div>
+
+| Stage | Description | Implementation |
+| :--- | :--- | :--- |
+| **1. Construct** | Expand a seed topic into sub-questions and retrieve evidence for the leaves. | [Evidence-tree construction](data_construction/) |
+| **2. Synthesize & verify** | Synthesize aligned queries and rubrics, then keep, revise, or drop each sample. | [Synthesis and verification](data_construction/) |
+| **3. Train** | Optimize a tool-using research agent with rubric rewards and GRPO. | [Training code](training/verl-tool/) |
+
+## Results
+
+| Model | SQAv2 | ResearchQA | DRB | Average | RL GPU-hours |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| Qwen3-8B + Search | 57.2 | 46.3 | 18.2 | 40.6 | 0 |
+| DR Tulu-8B (1,900 steps) | **86.8** | 74.3 | 43.4 | 68.2 | ~9,700 |
+| **DeepRubric-8B (140 steps)** | 86.0 | **75.2** | **43.6** | **68.3** | **~750** |
+
+Scores and approximate RL GPU-hours are reported in the [paper](https://arxiv.org/abs/2606.17029). Higher benchmark scores are better.
+
+<details>
+<summary><strong>Training efficiency curves</strong></summary>
+
+<img src="docs/assets/base-model-comparison-deeprubric.png" alt="SQAv2 and DRB benchmark scores at different numbers of RL training steps" width="860"/>
+
+</details>
+
+## Downloads
+
+| Resource | Location | Use |
+| :--- | :--- | :--- |
+| **DeepRubric-8B** | [Hugging Face model](https://huggingface.co/orange101/DeepRubric) | Released model checkpoint |
+| **DeepRubric dataset** | [Hugging Face dataset](https://huggingface.co/datasets/orange101/DeepRubric-dataset) | Query-rubric supervision |
+| Wikipedia assets | [ASearcher-Local-Knowledge](https://huggingface.co/datasets/inclusionAI/ASearcher-Local-Knowledge) | Corpus, webpages, index, and E5 model |
+| OpenScholar assets | [OpenScholar-DataStore-V3](https://huggingface.co/datasets/OpenSciLM/OpenScholar-DataStore-V3) | Scholarly passages and retrieval indexes |
+
+The repository includes retriever server code. Corpora, indexes, training data, and model weights are downloaded separately. See the [data guide](docs/DATA.md) for the expected layouts.
+
+## Quick Start
+
+### Requirements
 
 Prepare these external resources before running the full pipeline:
 
@@ -37,20 +81,8 @@ Prepare these external resources before running the full pipeline:
 - An OpenAI-compatible LLM endpoint for query/rubric synthesis and verification.
 - A model checkpoint and GPUs for GRPO training.
 
-## Reproduction Workflow
-
-The reproduction path is a single closed loop:
-
-```text
-download retriever assets
-  -> deploy local retrievers
-  -> construct evidence trees
-  -> verify KEEP/REVISE/DROP samples
-  -> convert verified samples to parquet
-  -> launch verl-tool GRPO training
-```
-
-Each stage has a concrete input and output:
+<details>
+<summary><strong>Pipeline stages and service endpoints</strong></summary>
 
 | Stage | Main code | Input | Output |
 | --- | --- | --- | --- |
@@ -70,7 +102,12 @@ The same retriever services are intentionally reused during data construction an
 | OpenScholar retrieval for tree construction | `OPENSCHOLAR_RETRIEVER_URL` | `http://localhost:8000/search` |
 | OpenScholar retrieval for training `scholar` tool | `SCHOLAR_URL` | `http://localhost:8000/search` |
 
-## Quick Start
+</details>
+
+### Installation
+
+<details>
+<summary><strong>Install the training and data-construction dependencies</strong></summary>
 
 Clone the repository and install the training stack in your preferred Python or conda environment:
 
@@ -93,6 +130,13 @@ pip install openai aiohttp requests numpy pandas tqdm transformers datasets fast
 
 The vendored retriever servers additionally require their own dependencies, including FAISS, PyTorch, Transformers, FastAPI, Hydra/OmegaConf, and SentenceTransformers.
 
+</details>
+
+### Configuration
+
+<details>
+<summary><strong>Configure the synthesis and verification models</strong></summary>
+
 Configure an OpenAI-compatible endpoint for evidence-tree construction and quality verification:
 
 ```bash
@@ -110,28 +154,12 @@ export EXTRACT_MODEL=Qwen/Qwen3.5-35B-A3B-Instruct
 export JUDGE_MODEL=gpt-5.1
 ```
 
-After setting the asset paths and endpoint URLs below, the full command template is:
+</details>
 
-```bash
-START_RETRIEVERS=1 bash scripts/run_pipeline.sh
-```
+### Asset Paths and Endpoints
 
-If the retrievers are already running in another terminal, use:
-
-```bash
-bash scripts/run_pipeline.sh
-```
-
-`scripts/run_pipeline.sh` is a reproduction template. Check local paths, model names, retriever ports, and GPU settings before using it for a full run.
-
-## External Assets
-
-Download the released DeepRubric assets and external retriever data assets:
-
-- Model checkpoint: <https://huggingface.co/orange101/DeepRubric>
-- DeepRubric dataset: <https://huggingface.co/datasets/orange101/DeepRubric-dataset>
-- Wikipedia retriever assets: <https://huggingface.co/datasets/inclusionAI/ASearcher-Local-Knowledge>
-- OpenScholar datastore: <https://huggingface.co/datasets/OpenSciLM/OpenScholar-DataStore-V3>
+<details>
+<summary><strong>Local data paths, corpus layout, and retriever URLs</strong></summary>
 
 The retriever server code is included under `retrievers/`. Set paths to your local data copies. The defaults in the scripts are virtual placeholders and must be replaced for a real run:
 
@@ -164,7 +192,30 @@ export BROWSE_URL="$WIKI_BROWSE_URL"
 export SCHOLAR_URL="$OPENSCHOLAR_RETRIEVER_URL"
 ```
 
-## 1. Deploy Retrievers
+</details>
+
+### Run the Pipeline
+
+After installing the dependencies and configuring the [asset paths and endpoints](#asset-paths-and-endpoints), run:
+
+```bash
+START_RETRIEVERS=1 bash scripts/run_pipeline.sh
+```
+
+If the retrievers are already running in another terminal, use:
+
+```bash
+bash scripts/run_pipeline.sh
+```
+
+`scripts/run_pipeline.sh` is a reproduction template. Check local paths, model names, retriever ports, and GPU settings before using it for a full run.
+
+## Reproduction Workflow
+
+Run the following stages separately to inspect intermediate outputs. The examples use the environment variables from [Quick Start](#quick-start).
+
+<details>
+<summary><strong>1. Deploy retrievers</strong></summary>
 
 Start both retrievers and keep the process running:
 
@@ -188,7 +239,10 @@ bash retrievers/openscholar/start_single_node.sh
 
 The training scripts expect the same endpoints through `SEARCH_URL`, `BROWSE_URL`, and `SCHOLAR_URL`. Override them only if you changed the retriever ports.
 
-## 2. Construct Evidence Trees
+</details>
+
+<details>
+<summary><strong>2. Construct evidence trees</strong></summary>
 
 Generate Wikipedia evidence trees:
 
@@ -222,7 +276,10 @@ outputs/wiki_evidence_trees/
 outputs/openscholar_evidence_trees/
 ```
 
-## 3. Verify and Export Samples
+</details>
+
+<details>
+<summary><strong>3. Verify and export samples</strong></summary>
 
 Run the verifier and export retained or revised records:
 
@@ -246,7 +303,10 @@ python data_construction/recursive_qa_quality_filter.py \
 
 The verifier checks query-rubric alignment, evidence support, merge faithfulness, rubric atomicity, redundancy, and scoring validity.
 
-## 4. Convert to Training Data
+</details>
+
+<details>
+<summary><strong>4. Convert to training data</strong></summary>
 
 Convert verified tree records to query-rubric JSONL:
 
@@ -274,7 +334,10 @@ training/verl-tool/data/deeprubric/train.parquet
 training/verl-tool/data/deeprubric/test.parquet
 ```
 
-## 5. Start GRPO Training
+</details>
+
+<details>
+<summary><strong>5. Start GRPO training</strong></summary>
 
 Keep the retrievers running, then launch training:
 
@@ -316,7 +379,10 @@ tool_search_multi,tool_browse,tool_scholar_multi
 
 Those tools call the external retriever endpoints above during rollout.
 
-## Full Pipeline Script
+</details>
+
+<details>
+<summary><strong>Full pipeline execution order</strong></summary>
 
 The Quick Start command is a wrapper around the step-by-step workflow above. It runs:
 
@@ -329,6 +395,19 @@ retriever startup, if START_RETRIEVERS=1
   -> parquet conversion
   -> GRPO training startup
 ```
+
+</details>
+
+## Repository Structure
+
+| Directory | Contents |
+| :--- | :--- |
+| [`retrievers/`](retrievers/) | Wikipedia and OpenScholar server code and launch wrappers |
+| [`data_construction/`](data_construction/) | Evidence-tree construction, query-rubric synthesis, and verification |
+| [`data_conversion/`](data_conversion/) | Verified tree JSONL to training JSONL and parquet conversion |
+| [`training/verl-tool/`](training/verl-tool/) | Training framework and DeepRubric GRPO entrypoints |
+| [`scripts/`](scripts/) | Retriever startup and full-pipeline scripts |
+| [`docs/`](docs/) | Project page, paper figures, and data setup guide |
 
 ## Notes
 
